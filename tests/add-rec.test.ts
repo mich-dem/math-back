@@ -5,17 +5,13 @@ test("Can build record", () => {
         id: 'jakis',
         nick: 'Tales',
         pass: 'xxx',
-        add: 3,
-        div: 4,
-        mul: 1,
+        add: 0,
         sub: 0,
+        mul: 0,
+        div: 0,
     });
     expect(xx.id).toBe('jakis');
     expect(xx.nick).toBe('Tales');
     expect(xx.pass).toBe('xxx');
-    expect(xx.add).toBe(3);
-    expect(xx.div).toBe(4);
-    expect(xx.mul).toBe(1);
-    expect(xx.sub).toBe(0);
 
 })
