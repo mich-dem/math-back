@@ -48,11 +48,16 @@ export class MathRecord implements MathEntity {
         return results.length === 0;
     };
 
-    static async checkLog(nick: string, passLog: string): Promise<boolean> {
-        const [[{pass}]] = await pool.execute('SELECT `pass` FROM `math` WHERE nick = :nick', {
-            nick
-        }) as MathRecordResults;
-        return compareSync(passLog, pass);
+    static async checkLog(nick: string, passLog: string): Promise<void | boolean> {
+        const falseNick = await MathRecord.checkNick(nick);
+        if (falseNick) {
+            throw new ValidationError("Taki login nie istnieje.");
+        } else {
+            const [[{pass}]] = await pool.execute('SELECT `pass` FROM `math` WHERE nick = :nick', {
+                nick
+            }) as MathRecordResults;
+            return compareSync(passLog, pass);
+        }
     };
 
     static async findAll(name: string): Promise<MathToList[]> {

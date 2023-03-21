@@ -1,6 +1,7 @@
 import {Router} from "express";
 import {MathRecord} from "../record/math.record";
 
+
 export const mathRouter = Router()
 
     .get('/all/:sort', async (req, res) => {
@@ -13,11 +14,6 @@ export const mathRouter = Router()
         res.json(points);
     })
 
-    .get('/log/:nick/:pass', async (req, res) => {
-        const trueLog = await MathRecord.checkLog(req.params.nick, req.params.pass);
-        res.json(trueLog);
-    })
-
     .get('/plus/:nick/:name/:val', async (req, res) => {
         const value = await MathRecord.addPoints(req.params.nick, req.params.name, Number(req.params.val));
         res.json(value);
@@ -28,10 +24,15 @@ export const mathRouter = Router()
         res.json(user);
     })
 
+    .post('/log', async (req, res) => {
+        const {nick, pass} = req.body;
+        const trueLog = await MathRecord.checkLog(nick, pass);
+        res.json(trueLog);
+        console.log(trueLog);
+    })
+
     .post('/', async (req, res) => {
         const ent = new MathRecord(req.body);
         await ent.insert();
         res.json(ent);
     })
-
-
