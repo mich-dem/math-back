@@ -3,9 +3,13 @@ import {ValidationError} from "../util/errors";
 import {pool} from "../util/db";
 import {FieldPacket} from "mysql2";
 import {v4 as uuid} from "uuid";
+import {compareSync, hashSync} from 'bcrypt';
 
 type MathRecordResults = [MathEntity[], FieldPacket[]];
-
+const setPass = (oldPass: string): string => {
+    const hash = hashSync(oldPass, 10);
+    return hash;
+}
 export class MathRecord implements MathEntity {
     id: string;
     nick: string;
@@ -14,6 +18,7 @@ export class MathRecord implements MathEntity {
     div: number;
     mul: number;
     sub: number;
+
 
     constructor(obj: NewMathEntity) {
         if (!obj.nick || obj.nick.length > 24) {
@@ -43,11 +48,11 @@ export class MathRecord implements MathEntity {
         return results.length === 0;
     };
 
-    static async checkLog(nick: string, pass: string): Promise<boolean> {
-        const [results] = await pool.execute('SELECT * FROM `math` WHERE nick = :nick AND pass = :pass', {
-            nick, pass
+    static async checkLog(nick: string, passLog: string): Promise<boolean> {
+        const [[{pass}]] = await pool.execute('SELECT `pass` FROM `math` WHERE nick = :nick', {
+            nick
         }) as MathRecordResults;
-        return results.length !== 0;
+        return compareSync(passLog, pass);
     };
 
     static async findAll(name: string): Promise<MathToList[]> {
@@ -99,7 +104,16 @@ export class MathRecord implements MathEntity {
         if (await MathRecord.checkNick(this.nick)) {
             if (!this.id) {
                 this.id = uuid();
-                await pool.execute("INSERT INTO `math` (`id`, `nick`, `pass`, `add`, `sub`, `mul`, `div`) VALUES (:id, :nick, :pass, :add, :sub, :mul, :div)", this)
+                const val = setPass(this.pass);
+                await pool.execute("INSERT INTO `math` (`id`, `nick`, `pass`, `add`, `sub`, `mul`, `div`) VALUES (:id, :nick, :pass, :add, :sub, :mul, :div)", {
+                    id: this.id,
+                    nick: this.nick,
+                    pass: val,
+                    add: this.add,
+                    sub: this.sub,
+                    mul: this.mul,
+                    div: this.div,
+                })
             } else {
                 throw new ValidationError("Takie id juz istnieje");
             }
