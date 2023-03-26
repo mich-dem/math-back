@@ -13,12 +13,7 @@ export const mathRouter = Router()
     .get('/res/:id', async (req, res) => {
         const points = await MathRecord.getOneRes(req.params.id);
         res.json(points);
-    })/*
-
-    .get('/plus/:id/:name/:val', async (req, res) => {
-        const value = await MathRecord.addPoints(req.params.id, req.params.name, Number(req.params.val));
-        res.json(value);
-    })*/
+    })
 
     .get('/:id', async (req, res) => {
         const user = await MathRecord.getOne(req.params.id);
