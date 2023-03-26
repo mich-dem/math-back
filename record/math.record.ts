@@ -3,12 +3,10 @@ import {ValidationError} from "../util/errors";
 import {pool} from "../util/db";
 import {FieldPacket} from "mysql2";
 import {v4 as uuid} from 'uuid';
-import {compareSync, hashSync} from 'bcrypt';
+import {compare, hash} from 'bcrypt';
 
 type MathRecordResults = [MathEntity[], FieldPacket[]];
-const setPass = (oldPass: string): string => {
-    return hashSync(oldPass, 10);
-}
+
 export class MathRecord implements MathEntity {
     id: string;
     nick: string;
@@ -55,7 +53,8 @@ export class MathRecord implements MathEntity {
             const [[{pass, id}]] = await pool.execute('SELECT `pass`, `id` FROM `math` WHERE `nick` = :nick', {
                 nick
             }) as MathRecordResults;
-            return compareSync(passLog, pass) ? id : '';
+            const isTruePass = await compare(passLog, pass);
+            return isTruePass ? id : '';
         }
     };
 
@@ -108,7 +107,7 @@ export class MathRecord implements MathEntity {
         if (await MathRecord.checkNick(this.nick)) {
             if (!this.id) {
                 this.id = uuid();
-                const val = setPass(this.pass);
+                const val = await hash(this.pass, 10);
                 await pool.execute("INSERT INTO `math` (`id`, `nick`, `pass`, `add`, `sub`, `mul`, `div`) VALUES (:id, :nick, :pass, :add, :sub, :mul, :div)", {
                     id: this.id,
                     nick: this.nick,

@@ -15,7 +15,7 @@ test('Download data from DB', async () => {
 
     expect(ad).toBeDefined();
     expect(ad.nick).toBe('Michu');
-    expect(ad.pass).toBe('xyz');
+    expect(ad.pass).toBe('$2b$10$C/VdLSe25AkYmN8K/RCeietAKqCIxtnRMnI7xP1XNQiko/9XMZube');
 });
 
 test('If isnt returned null', async () => {
@@ -41,27 +41,21 @@ test('AdRecord.insert inserts data to database.', async () => {
 });
 
 test('Getting 1 result: getOneRes', async () => {
-    const foundAd = await MathRecord.getOneRes('7b7cf08b-cfe4-46cd-8c7e-c5d8fc4376b5');
+    const foundAd = await MathRecord.getOneRes('ed28667b-86ea-4c0c-acda-319d95dd1695');
 
-    expect(foundAd.add).toBe(4);
-    expect(foundAd.sub).toBe(5);
-    expect(foundAd.mul).toBe(7);
-    expect(foundAd.div).toBe(9);
+    expect(foundAd.add).toBe(0);
+    expect(foundAd.sub).toBe(0);
+    expect(foundAd.mul).toBe(0);
+    expect(foundAd.div).toBe(0);
 });
 
 test('Change value Points', async () => {
-    const ad = await MathRecord.getOne('7b7cf08b-cfe4-46cd-8c7e-c5d8fc4376b5');
-    console.log(ad);
-    await ad.addPoints({
-        add: 10,
-        sub: 20,
-        mul: 40,
-    });
-    const foundAd = await MathRecord.getOneRes('7b7cf08b-cfe4-46cd-8c7e-c5d8fc4376b5');
+    await MathRecord.addPoints('ed28667b-86ea-4c0c-acda-319d95dd1695', 'add', 5);
+    const foundAd = await MathRecord.getOneRes('ed28667b-86ea-4c0c-acda-319d95dd1695');
 
-    expect(foundAd.add).toBe(14);
-    expect(foundAd.sub).toBe(25);
-    expect(foundAd.mul).toBe(47);
-    expect(foundAd.div).toBe(9);
+    expect(foundAd.add).toBe(5);
+    expect(foundAd.sub).toBe(0);
+    expect(foundAd.mul).toBe(0);
+    expect(foundAd.div).toBe(0);
 });
 
