@@ -9,13 +9,13 @@ export const mathRouter = Router()
         res.json(results);
     })
 
-    .get('/res/:nick', async (req, res) => {
-        const points = await MathRecord.getOneRes(req.params.nick);
+    .get('/res/:id', async (req, res) => {
+        const points = await MathRecord.getOneRes(req.params.id);
         res.json(points);
     })
 
-    .get('/plus/:nick/:name/:val', async (req, res) => {
-        const value = await MathRecord.addPoints(req.params.nick, req.params.name, Number(req.params.val));
+    .get('/plus/:id/:name/:val', async (req, res) => {
+        const value = await MathRecord.addPoints(req.params.id, req.params.name, Number(req.params.val));
         res.json(value);
     })
 

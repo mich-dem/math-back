@@ -85,17 +85,17 @@ export class MathRecord implements MathEntity {
         });
     }
 
-    static async getOneRes(nick: string): Promise<MathTaskRes> {
-        const [[results]] = await pool.execute('SELECT `add`, `sub`, `mul`, `div` FROM `math` WHERE `nick` = :nick', {
-            nick
+    static async getOneRes(id: string): Promise<MathTaskRes> {
+        const [[results]] = await pool.execute('SELECT `add`, `sub`, `mul`, `div` FROM `math` WHERE `id` = :id', {
+            id
         }) as MathRecordResults;
         return results;
     };
 
-    static async addPoints(nick: string, name: string, val: number): Promise<boolean> {
-        const ent = await MathRecord.getOneRes(nick);
-        await pool.execute("UPDATE `math` SET  `add` = :add, `sub` = :sub, `mul` = :mul, `div` = :div WHERE `nick` = :nick", {
-            nick,
+    static async addPoints(id: string, name: string, val: number): Promise<boolean> {
+        const ent = await MathRecord.getOneRes(id);
+        await pool.execute("UPDATE `math` SET  `add` = :add, `sub` = :sub, `mul` = :mul, `div` = :div WHERE `id` = :id", {
+            id,
             add: name === 'add' ? ent.add + val : ent.add,
             sub: name === 'sub' ? ent.sub + val : ent.sub,
             mul: name === 'mul' ? ent.mul + val : ent.mul,
