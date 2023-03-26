@@ -91,14 +91,14 @@ export class MathRecord implements MathEntity {
         return results;
     };
 
-    static async addPoints(id: string, name: string, val: number): Promise<boolean> {
+    static async addPoints(id: string, name: number, val: number): Promise<boolean> {
         const ent = await MathRecord.getOneRes(id);
         await pool.execute("UPDATE `math` SET  `add` = :add, `sub` = :sub, `mul` = :mul, `div` = :div WHERE `id` = :id", {
             id,
-            add: name === 'add' ? ent.add + val : ent.add,
-            sub: name === 'sub' ? ent.sub + val : ent.sub,
-            mul: name === 'mul' ? ent.mul + val : ent.mul,
-            div: name === 'div' ? ent.div + val : ent.div,
+            add: name === 1 ? ent.add + val : ent.add,
+            sub: name === 2 ? ent.sub + val : ent.sub,
+            mul: name === 3 ? ent.mul + val : ent.mul,
+            div: name === 4 ? ent.div + val : ent.div,
         })
         return true;
     };
