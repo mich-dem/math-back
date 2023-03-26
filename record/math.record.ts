@@ -2,13 +2,12 @@ import {MathEntity, MathTaskRes, MathToList, NewMathEntity} from "../types";
 import {ValidationError} from "../util/errors";
 import {pool} from "../util/db";
 import {FieldPacket} from "mysql2";
-import {v4 as uuid} from "uuid";
+import {v4 as uuid} from 'uuid';
 import {compareSync, hashSync} from 'bcrypt';
 
 type MathRecordResults = [MathEntity[], FieldPacket[]];
 const setPass = (oldPass: string): string => {
-    const hash = hashSync(oldPass, 10);
-    return hash;
+    return hashSync(oldPass, 10);
 }
 export class MathRecord implements MathEntity {
     id: string;
@@ -22,7 +21,7 @@ export class MathRecord implements MathEntity {
 
     constructor(obj: NewMathEntity) {
         if (!obj.nick || obj.nick.length > 24) {
-            throw new ValidationError("Nick nie może być pusta nazwa, ani nue może przekraczać 24 znaków.")
+            throw new ValidationError("Nick nie może być pusta nazwa, ani nie może przekraczać 24 znaków.")
         }
 
         this.id = obj.id;
@@ -35,14 +34,14 @@ export class MathRecord implements MathEntity {
     }
 
     static async getOne(id: string): Promise<MathRecord | null> {
-        const [results] = await pool.execute('SELECT * FROM `math` WHERE id = :id', {
+        const [results] = await pool.execute('SELECT * FROM `math` WHERE `id` = :id', {
             id
         }) as MathRecordResults;
         return results.length === 0 ? null : new MathRecord(results[0]);
     };
 
     static async checkNick(nick: string): Promise<boolean> {
-        const [results] = await pool.execute('SELECT * FROM `math` WHERE nick = :nick', {
+        const [results] = await pool.execute('SELECT * FROM `math` WHERE `nick` = :nick', {
             nick
         }) as MathRecordResults;
         return results.length === 0;
@@ -51,9 +50,9 @@ export class MathRecord implements MathEntity {
     static async checkLog(nick: string, passLog: string): Promise<void | boolean> {
         const falseNick = await MathRecord.checkNick(nick);
         if (falseNick) {
-            throw new ValidationError("Taki login nie istnieje.");
+            throw new ValidationError("Taki nick nie istnieje");
         } else {
-            const [[{pass}]] = await pool.execute('SELECT `pass` FROM `math` WHERE nick = :nick', {
+            const [[{pass}]] = await pool.execute('SELECT `pass` FROM `math` WHERE `nick` = :nick', {
                 nick
             }) as MathRecordResults;
             return compareSync(passLog, pass);
@@ -87,7 +86,7 @@ export class MathRecord implements MathEntity {
     }
 
     static async getOneRes(nick: string): Promise<MathTaskRes> {
-        const [[results]] = await pool.execute('SELECT `add`, `sub`, `mul`, `div` FROM `math` WHERE nick = :nick', {
+        const [[results]] = await pool.execute('SELECT `add`, `sub`, `mul`, `div` FROM `math` WHERE `nick` = :nick', {
             nick
         }) as MathRecordResults;
         return results;
@@ -95,7 +94,7 @@ export class MathRecord implements MathEntity {
 
     static async addPoints(nick: string, name: string, val: number): Promise<boolean> {
         const ent = await MathRecord.getOneRes(nick);
-        await pool.execute("UPDATE `math` SET  `add` = :add, `sub` = :sub, `mul` = :mul, `div` = :div WHERE nick = :nick", {
+        await pool.execute("UPDATE `math` SET  `add` = :add, `sub` = :sub, `mul` = :mul, `div` = :div WHERE `nick` = :nick", {
             nick,
             add: name === 'add' ? ent.add + val : ent.add,
             sub: name === 'sub' ? ent.sub + val : ent.sub,
