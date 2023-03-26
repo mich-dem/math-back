@@ -9,13 +9,13 @@ export const mathRouter = Router()
         res.json(results);
     })
 
-    .get('/res/:nick', async (req, res) => {
-        const points = await MathRecord.getOneRes(req.params.nick);
+    .get('/res/:id', async (req, res) => {
+        const points = await MathRecord.getOneRes(req.params.id);
         res.json(points);
     })
 
-    .get('/plus/:nick/:name/:val', async (req, res) => {
-        const value = await MathRecord.addPoints(req.params.nick, req.params.name, Number(req.params.val));
+    .get('/plus/:id/:name/:val', async (req, res) => {
+        const value = await MathRecord.addPoints(req.params.id, req.params.name, Number(req.params.val));
         res.json(value);
     })
 
@@ -26,8 +26,8 @@ export const mathRouter = Router()
 
     .post('/log', async (req, res) => {
         const {nick, pass} = req.body;
-        const trueLog = await MathRecord.checkLog(nick, pass);
-        res.json(trueLog);
+        const downId = await MathRecord.checkLog(nick, pass);
+        res.json(downId);
     })
 
     .post('/', async (req, res) => {

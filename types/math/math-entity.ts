@@ -1,4 +1,5 @@
 export interface MathEntity {
+    id: string;
     nick: string;
     pass: string;
     add: number;
