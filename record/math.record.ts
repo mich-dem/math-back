@@ -47,15 +47,15 @@ export class MathRecord implements MathEntity {
         return results.length === 0;
     };
 
-    static async checkLog(nick: string, passLog: string): Promise<void | boolean> {
+    static async checkLog(nick: string, passLog: string): Promise<void | string> {
         const falseNick = await MathRecord.checkNick(nick);
         if (falseNick) {
             throw new ValidationError("Taki nick nie istnieje");
         } else {
-            const [[{pass}]] = await pool.execute('SELECT `pass` FROM `math` WHERE `nick` = :nick', {
+            const [[{pass, id}]] = await pool.execute('SELECT `pass`, `id` FROM `math` WHERE `nick` = :nick', {
                 nick
             }) as MathRecordResults;
-            return compareSync(passLog, pass);
+            return compareSync(passLog, pass) ? id : '';
         }
     };
 

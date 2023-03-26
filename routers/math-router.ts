@@ -26,8 +26,8 @@ export const mathRouter = Router()
 
     .post('/log', async (req, res) => {
         const {nick, pass} = req.body;
-        const trueLog = await MathRecord.checkLog(nick, pass);
-        res.json(trueLog);
+        const downId = await MathRecord.checkLog(nick, pass);
+        res.json(downId);
     })
 
     .post('/', async (req, res) => {
