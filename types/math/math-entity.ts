@@ -6,6 +6,7 @@ export interface MathEntity {
     sub: number;
     mul: number;
     div: number;
+    email: string;
 }
 
 export interface NewMathEntity extends Omit<MathEntity, 'id'> {

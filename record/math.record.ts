@@ -4,6 +4,7 @@ import {pool} from "../util/db";
 import {FieldPacket} from "mysql2";
 import {v4 as uuid} from 'uuid';
 import {compare, hash} from 'bcrypt';
+import * as EmailValidator from 'email-validator';
 
 type MathRecordResults = [MathEntity[], FieldPacket[]];
 
@@ -15,16 +16,24 @@ export class MathRecord implements MathEntity {
     div: number;
     mul: number;
     sub: number;
+    email: string;
 
 
     constructor(obj: NewMathEntity) {
         if (!obj.nick || obj.nick.length > 24) {
             throw new ValidationError("Nick nie może być pusta nazwa, ani nie może przekraczać 24 znaków.")
         }
+        if (!obj.pass || obj.pass.length < 6) {
+            throw new ValidationError("Hasło nie może być pusta nazwa, ani nie może być krótsze niż 6 znaków.")
+        }
+        if (!(EmailValidator.validate(obj.email))) {
+            throw new ValidationError("To nie jest poprawny email!")
+        }
 
         this.id = obj.id;
         this.nick = obj.nick;
         this.pass = obj.pass;
+        this.email = obj.email;
         this.add = obj.add ?? 0;
         this.sub = obj.sub ?? 0;
         this.mul = obj.mul ?? 0;
@@ -108,7 +117,7 @@ export class MathRecord implements MathEntity {
             if (!this.id) {
                 this.id = uuid();
                 const val = await hash(this.pass, 10);
-                await pool.execute("INSERT INTO `math` (`id`, `nick`, `pass`, `add`, `sub`, `mul`, `div`) VALUES (:id, :nick, :pass, :add, :sub, :mul, :div)", {
+                await pool.execute("INSERT INTO `math` (`id`, `nick`, `pass`, `add`, `sub`, `mul`, `div`, `email`) VALUES (:id, :nick, :pass, :add, :sub, :mul, :div, :email)", {
                     id: this.id,
                     nick: this.nick,
                     pass: val,
@@ -116,6 +125,7 @@ export class MathRecord implements MathEntity {
                     sub: this.sub,
                     mul: this.mul,
                     div: this.div,
+                    email: this.email,
                 })
             } else {
                 throw new ValidationError("Takie id juz istnieje");

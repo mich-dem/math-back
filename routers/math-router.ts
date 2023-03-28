@@ -34,7 +34,6 @@ export const mathRouter = Router()
 
     .patch('/', async (req, res) => {
         const {id, val} = req.body;
-        console.log(val);
         const value = await MathRecord.addPoints(id, val[15], countPoints(val));
         res.json(value);
     })
