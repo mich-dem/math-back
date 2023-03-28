@@ -3,12 +3,11 @@ import {ValidationError} from "../util/errors";
 import {pool} from "../util/db";
 import {FieldPacket} from "mysql2";
 import {v4 as uuid} from 'uuid';
-import {compareSync, hashSync} from 'bcrypt';
+import {compare, hash} from 'bcrypt';
+import * as EmailValidator from 'email-validator';
 
 type MathRecordResults = [MathEntity[], FieldPacket[]];
-const setPass = (oldPass: string): string => {
-    return hashSync(oldPass, 10);
-}
+
 export class MathRecord implements MathEntity {
     id: string;
     nick: string;
@@ -17,16 +16,24 @@ export class MathRecord implements MathEntity {
     div: number;
     mul: number;
     sub: number;
+    email: string;
 
 
     constructor(obj: NewMathEntity) {
         if (!obj.nick || obj.nick.length > 24) {
             throw new ValidationError("Nick nie może być pusta nazwa, ani nie może przekraczać 24 znaków.")
         }
+        if (!obj.pass || obj.pass.length < 6) {
+            throw new ValidationError("Hasło nie może być pusta nazwa, ani nie może być krótsze niż 6 znaków.")
+        }
+        if (!(EmailValidator.validate(obj.email))) {
+            throw new ValidationError("To nie jest poprawny email!")
+        }
 
         this.id = obj.id;
         this.nick = obj.nick;
         this.pass = obj.pass;
+        this.email = obj.email;
         this.add = obj.add ?? 0;
         this.sub = obj.sub ?? 0;
         this.mul = obj.mul ?? 0;
@@ -55,7 +62,8 @@ export class MathRecord implements MathEntity {
             const [[{pass, id}]] = await pool.execute('SELECT `pass`, `id` FROM `math` WHERE `nick` = :nick', {
                 nick
             }) as MathRecordResults;
-            return compareSync(passLog, pass) ? id : '';
+            const isTruePass = await compare(passLog, pass);
+            return isTruePass ? id : '';
         }
     };
 
@@ -92,14 +100,14 @@ export class MathRecord implements MathEntity {
         return results;
     };
 
-    static async addPoints(id: string, name: string, val: number): Promise<boolean> {
+    static async addPoints(id: string, name: number, val: number): Promise<boolean> {
         const ent = await MathRecord.getOneRes(id);
         await pool.execute("UPDATE `math` SET  `add` = :add, `sub` = :sub, `mul` = :mul, `div` = :div WHERE `id` = :id", {
             id,
-            add: name === 'add' ? ent.add + val : ent.add,
-            sub: name === 'sub' ? ent.sub + val : ent.sub,
-            mul: name === 'mul' ? ent.mul + val : ent.mul,
-            div: name === 'div' ? ent.div + val : ent.div,
+            add: name === 1 ? ent.add + val : ent.add,
+            sub: name === 2 ? ent.sub + val : ent.sub,
+            mul: name === 3 ? ent.mul + val : ent.mul,
+            div: name === 4 ? ent.div + val : ent.div,
         })
         return true;
     };
@@ -108,8 +116,8 @@ export class MathRecord implements MathEntity {
         if (await MathRecord.checkNick(this.nick)) {
             if (!this.id) {
                 this.id = uuid();
-                const val = setPass(this.pass);
-                await pool.execute("INSERT INTO `math` (`id`, `nick`, `pass`, `add`, `sub`, `mul`, `div`) VALUES (:id, :nick, :pass, :add, :sub, :mul, :div)", {
+                const val = await hash(this.pass, 10);
+                await pool.execute("INSERT INTO `math` (`id`, `nick`, `pass`, `add`, `sub`, `mul`, `div`, `email`) VALUES (:id, :nick, :pass, :add, :sub, :mul, :div, :email)", {
                     id: this.id,
                     nick: this.nick,
                     pass: val,
@@ -117,6 +125,7 @@ export class MathRecord implements MathEntity {
                     sub: this.sub,
                     mul: this.mul,
                     div: this.div,
+                    email: this.email,
                 })
             } else {
                 throw new ValidationError("Takie id juz istnieje");
