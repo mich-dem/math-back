@@ -1,10 +1,10 @@
-import express, {json} from "express";
+import express, {json, Router} from "express";
 import cors from "cors"
 import 'express-async-errors';
 import rateLimit from 'express-rate-limit';
 import {handleError} from "./util/errors";
 import {mathRouter} from "./routers/math-router";
-import {config} from "./config/config.exemple";
+import {config} from "./config/config";
 
 const app = express();
 
@@ -17,7 +17,11 @@ app.use(rateLimit({
     max: 3700,
 }));
 
-app.use('/math', mathRouter);
+const router = Router();
+
+router.use('/math', mathRouter);
+
+app.use('/api', router);
 
 
 app.use(handleError);
