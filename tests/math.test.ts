@@ -1,14 +1,21 @@
 import {MathRecord} from "../record/math.record";
 import {NewMathEntity} from "../types";
+import {pool} from "../util/db";
 
 const defaultObj: NewMathEntity = {
     nick: "Ja",
     pass: "mis",
+    email: 'abc@def.pl',
     add: 0,
     sub: 0,
     mul: 0,
     div: 0,
 }
+
+afterAll(async () => {
+    await pool.end();
+});
+
 
 test('Download data from DB', async () => {
     const ad = await MathRecord.getOne('7b7cf08b-cfe4-46cd-8c7e-c5d8fc4376b5');
@@ -50,7 +57,7 @@ test('Getting 1 result: getOneRes', async () => {
 });
 
 test('Change value Points', async () => {
-    await MathRecord.addPoints('ed28667b-86ea-4c0c-acda-319d95dd1695', 'add', 5);
+    await MathRecord.addPoints('ed28667b-86ea-4c0c-acda-319d95dd1695', 1, 5);
     const foundAd = await MathRecord.getOneRes('ed28667b-86ea-4c0c-acda-319d95dd1695');
 
     expect(foundAd.add).toBe(5);

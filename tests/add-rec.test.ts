@@ -5,6 +5,7 @@ test("Can build record", () => {
         id: 'jakis',
         nick: 'Tales',
         pass: 'xxx',
+        email: 'abc@def.pl',
         add: 0,
         sub: 0,
         mul: 0,
