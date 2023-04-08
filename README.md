@@ -9,19 +9,23 @@ Można korzystać z niej bez rejestracji. Wtedy punkty naliczane są tylko w cza
 
 ## Linki
 Link do [działającej strony](https://matma.networkmanager.pl/)
+
 Link do [BE](https://github.com/mich-dem/math-back/)
+
 Link do [FE](https://github.com/mich-dem/math-front/)
 
 ## Technologie
 BE:
-Express
-NodeJS
-MySQL
+* Express
+* NodeJS
+
+Bazy danych:
+* MySQL
 
 FE:
-React
-CSS
+* React
+* CSS
 
 ## Niezrealizowane pomysły:
-Przepisanie BE na NestJS
-Dodanie opcji resetowania hasła
+1. Przepisanie BE na NestJS
+2. Dodanie opcji resetowania hasła
