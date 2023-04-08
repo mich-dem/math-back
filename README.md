@@ -5,7 +5,7 @@ Projekt powstał na zakończenie kursu MegaK
 Strona przeznaczona jest dla uczniów, którzy chcą trenować swoje umiejętności dotyczące dodawania, odejmowania, mnożenia i dzielenia.
 Można korzystać z niej bez rejestracji. Wtedy punkty naliczane są tylko w czasie pobytu na podstronie. Można też zarejestrować się (a później logować). Wtedy punkty zapisywane są w bazie danych i wyświetlane w rankingu - zakładka Wyniki.
 
-! [animowany gif z podglądem podstron](https://github.com/mich-dem/math-back/blob/main/images.gif)
+![animowany gif z podglądem podstron](https://github.com/mich-dem/math-back/blob/main/images.gif)
 
 ## Linki
 Link do [działającej strony](https://matma.networkmanager.pl/)
