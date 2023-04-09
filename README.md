@@ -19,7 +19,8 @@ BE:
 * Express
 * NodeJS
 * TypeScript ![TypeScript](https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg =40x40)
-* TS :::image type="icon" source="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg":::
+<a href="https://www.typescriptlang.org/" target="_blank" rel="noreferrer"> 
+<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="typescript" width="40" height="40"/> </a> 
 
 Bazy danych:
 * MySQL
