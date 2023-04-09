@@ -18,7 +18,7 @@ Link do [FE](https://github.com/mich-dem/math-front/)
 BE:
 * Express
 * NodeJS
-* TypeScript ![TypeScript](https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg =40x40)
+* TypeScript ![TypeScript](https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg=40x40)
 
 Bazy danych:
 * MySQL
