@@ -16,17 +16,17 @@ Link do [FE](https://github.com/mich-dem/math-front/)
 
 ## Technologie
 BE:
-* Express
-* NodeJS
+* Express <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" alt="express" width="20" height="20"/>
+* NodeJS (np. bcrypt) <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original-wordmark.svg" alt="nodejs" width="20" height="20"/>
 * TypeScript <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="typescript" width="20" height="20"/> 
 
 Bazy danych:
-* MySQL
+* MySQL <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="20" height="20"/>
 
 FE:
-* React
-* CSS
+* React <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" alt="react" width="20" height="20"/>
+* CSS <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="20" height="20"/>
 
 ## Niezrealizowane pomysły:
-1. Przepisanie BE na NestJS
+1. Przepisanie BE na NestJS <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nestjs/nestjs-plain.svg" alt="nestjs" width="20" height="20"/>
 2. Dodanie opcji resetowania hasła
